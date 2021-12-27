@@ -26,6 +26,7 @@
 
 
     <RadioGroup
+        android:id="@+id/radioGroup"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
@@ -45,28 +46,31 @@
 
         <RadioButton
             android:id="@+id/radio_loadapp"
+            style="@style/radio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/radio_udacity_label"
             android:layout_marginBottom="8dp"
-            style="@style/radio"  />
+            android:text="@string/radio_udacity_label" />
 
         <RadioButton
             android:id="@+id/radio_retrofit"
+            style="@style/radio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/radio_retrofit_label"
-            style="@style/radio"  />
+            android:text="@string/radio_retrofit_label" />
     </RadioGroup>
 
     <com.udacity.LoadingButton
         android:id="@+id/custom_button"
         android:layout_width="0dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+        app:buttonBackground="@color/colorPrimary"
+        app:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/radioGroup"
+        app:layout_constraintVertical_bias="1.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
