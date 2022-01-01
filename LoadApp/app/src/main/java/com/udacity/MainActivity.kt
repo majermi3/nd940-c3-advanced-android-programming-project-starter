@@ -12,6 +12,9 @@ import android.database.Cursor
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -30,6 +33,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var action: NotificationCompat.Action
 
     private lateinit var downloadButton: LoadingButton
+    private lateinit var downloadOptions: RadioGroup
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,16 +43,24 @@ class MainActivity : AppCompatActivity() {
         downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 
         downloadButton = findViewById(R.id.downloadButton)
+        downloadOptions = findViewById(R.id.downloadOptions)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
 
         downloadButton.setOnClickListener {
-            downloadButton.isEnabled = false
-            downloadButton.reset()
-            download()
-            // Set progress to 10% to indicate beginning of download
-            downloadButton.setProgress(10f, 500)
-            observeProgress()
+            val url = getSelectedDownloadUrl()
+
+            if (url != null) {
+                downloadButton.isEnabled = false
+                downloadButton.reset()
+                download(url)
+                // Set progress to 10% to indicate beginning of download
+                downloadButton.setProgress(10f, 500)
+                observeProgress()
+
+            } else {
+                showToast(R.string.warning_no_file_selected)
+            }
         }
     }
 
@@ -62,9 +74,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun download() {
+    private fun download(url: String) {
         val request =
-            DownloadManager.Request(Uri.parse(URL))
+            DownloadManager.Request(Uri.parse(url))
                 .setTitle(getString(R.string.app_name))
                 .setDescription(getString(R.string.app_description))
                 .setRequiresCharging(false)
@@ -85,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (cursor.moveToFirst()) {
                     progress = getProgress(cursor)
-                    if(progress in 0.0..100.0 && progress > previousProgress + PROGRESS_THRESHOLD) {
+                    if (progress in 0.0..100.0 && progress > previousProgress + PROGRESS_THRESHOLD) {
                         runOnUiThread {
                             downloadButton.setProgress(progress)
                         }
@@ -113,9 +125,23 @@ class MainActivity : AppCompatActivity() {
         return bytesDownloaded * 1f / bytesTotal * 100
     }
 
+    private fun showToast(resId: Int) {
+        Toast.makeText(applicationContext, resId, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun getSelectedDownloadUrl(): String? {
+        val selectedRadio = findViewById<RadioButton>(downloadOptions.checkedRadioButtonId)
+        val selectedRadioIdx = downloadOptions.indexOfChild(selectedRadio)
+
+        return when(selectedRadioIdx) {
+            0 -> "https://github.com/bumptech/glide"
+            1 -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
+            2 -> "https://github.com/square/retrofit"
+            else -> null
+        }
+    }
+
     companion object {
-        private const val URL =
-            "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter/archive/master.zip"
         private const val CHANNEL_ID = "channelId"
         private const val PROGRESS_THRESHOLD = 1f
     }
