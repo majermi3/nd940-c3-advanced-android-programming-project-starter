@@ -67,20 +67,6 @@ class LoadingButton @JvmOverloads constructor(
             loadingText = getString(R.styleable.LoadingButton_textWhileLoading) ?: ""
             text = initialText
         }
-    }
-
-    fun setProgress(newProgress: Float) {
-        setProgress(newProgress, (newProgress / 100).toLong() * 500)
-    }
-
-    fun setProgress(newProgress: Float, duration: Long) {
-        // Cancel previous animation
-        buttonState = ButtonState.Loading
-
-        progressAnimation.cancel()
-
-        progressAnimation.setFloatValues(progress, newProgress)
-        progressAnimation.duration = duration
         progressAnimation.addUpdateListener {
             progress = it.animatedValue as Float
             invalidate()
@@ -92,6 +78,20 @@ class LoadingButton @JvmOverloads constructor(
                 }
             }
         })
+    }
+
+    fun setProgress(newProgress: Float) {
+        setProgress(newProgress, (newProgress / 100).toLong() * 500)
+    }
+
+    fun setProgress(newProgress: Float, duration: Long) {
+        buttonState = ButtonState.Loading
+
+        // Cancel previous animation
+        progressAnimation.cancel()
+
+        progressAnimation.setFloatValues(progress, newProgress)
+        progressAnimation.duration = duration
         progressAnimation.start()
     }
 
