@@ -52,12 +52,11 @@ class MainActivity : AppCompatActivity() {
 
             if (url != null) {
                 downloadButton.isEnabled = false
-                downloadButton.reset()
                 download(url)
-                // Set progress to 10% to indicate beginning of download
-                downloadButton.setProgress(10f, 500)
-                observeProgress()
 
+                // Set progress to 10% to indicate beginning of download
+                downloadButton.setProgress(INITIAL_PROGRESS, 500)
+                observeProgress()
             } else {
                 showToast(R.string.warning_no_file_selected)
             }
@@ -68,9 +67,6 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             downloadButton.isEnabled = true
-            if (progress < 100) {
-                downloadButton.setProgress(100f)
-            }
         }
     }
 
@@ -97,7 +93,7 @@ class MainActivity : AppCompatActivity() {
 
                 if (cursor.moveToFirst()) {
                     progress = getProgress(cursor)
-                    if (progress in 0.0..100.0 && progress > previousProgress + PROGRESS_THRESHOLD) {
+                    if (progress in INITIAL_PROGRESS..100.0f && progress > previousProgress + PROGRESS_THRESHOLD) {
                         runOnUiThread {
                             downloadButton.setProgress(progress)
                         }
@@ -144,6 +140,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         private const val CHANNEL_ID = "channelId"
         private const val PROGRESS_THRESHOLD = 1f
+        private const val INITIAL_PROGRESS = 10f
     }
 
 }

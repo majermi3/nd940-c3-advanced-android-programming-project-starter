@@ -4,9 +4,7 @@
         <attr name="buttonBackground" format="color" />
         <attr name="progressColor" format="color" />
         <attr name="textColor" format="color" />
-    </declare-styleable>
-
-    <declare-styleable name="RadioButton">
-        <attr name="url" format="string" />
+        <attr name="text" format="string" />
+        <attr name="textWhileLoading" format="string" />
     </declare-styleable>
 </resources>

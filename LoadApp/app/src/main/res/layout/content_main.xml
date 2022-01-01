@@ -65,6 +65,8 @@
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
+        app:text="@string/download"
+        app:textWhileLoading="@string/download_in_progress"
         app:buttonBackground="@color/colorPrimary"
         app:textColor="@color/white"
         app:progressColor="@color/colorPrimaryDark"

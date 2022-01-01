@@ -1,5 +1,7 @@
 package com.udacity
 
+import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -20,10 +22,12 @@ class LoadingButton @JvmOverloads constructor(
     private var textColor = 0
     private var buttonBackground = 0
     private var progressColor = 0
+    private var text = ""
+    private var initialText = ""
+    private var loadingText = ""
 
     private var progress = 0f
-
-    val anim = ValueAnimator()
+    private val progressAnimation = ValueAnimator()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -33,7 +37,18 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     private var buttonState: ButtonState by Delegates.observable<ButtonState>(ButtonState.Completed) { p, old, new ->
-
+        if (old != new) {
+            when (new) {
+                ButtonState.Loading -> {
+                    text = loadingText
+                }
+                ButtonState.Completed -> {
+                    text = initialText
+                    progress = 0f
+                }
+            }
+            invalidate()
+        }
     }
 
     init {
@@ -42,28 +57,37 @@ class LoadingButton @JvmOverloads constructor(
             buttonBackground = getColor(R.styleable.LoadingButton_buttonBackground, 0)
             progressColor = getColor(R.styleable.LoadingButton_progressColor, 0)
             textColor = getColor(R.styleable.LoadingButton_textColor, 0)
+
+            initialText = getString(R.styleable.LoadingButton_text) ?: ""
+            loadingText = getString(R.styleable.LoadingButton_textWhileLoading) ?: ""
+            text = initialText
         }
     }
 
-    fun reset() {
-        progress = 0f
+    fun setProgress(newProgress: Float) {
+        setProgress(newProgress, (newProgress / 100).toLong() * 500)
     }
 
-    fun setProgress(progress: Float) {
-        setProgress(progress, (progress / 100).toLong() * 500)
-    }
-
-    fun setProgress(progress: Float, duration: Long) {
+    fun setProgress(newProgress: Float, duration: Long) {
         // Cancel previous animation
-        anim.cancel()
+        buttonState = ButtonState.Loading
 
-        anim.setFloatValues(this.progress, progress)
-        anim.duration = duration
-        anim.addUpdateListener {
-            this.progress = it.animatedValue as Float
+        progressAnimation.cancel()
+
+        progressAnimation.setFloatValues(progress, newProgress)
+        progressAnimation.duration = duration
+        progressAnimation.addUpdateListener {
+            progress = it.animatedValue as Float
             invalidate()
         }
-        anim.start()
+        progressAnimation.addListener(object : AnimatorListenerAdapter() {
+            override fun onAnimationEnd(animation: Animator?) {
+                if (progress >= 100f) {
+                    buttonState = ButtonState.Completed
+                }
+            }
+        })
+        progressAnimation.start()
     }
 
     override fun onDraw(canvas: Canvas) {
@@ -78,7 +102,7 @@ class LoadingButton @JvmOverloads constructor(
 
         paint.color = textColor
         canvas.drawText(
-                resources.getString(R.string.download),
+                text,
                 widthSize.toFloat() / 2,
                 (heightSize.toFloat() - paint.descent() - paint.ascent()) / 2,
                 paint
