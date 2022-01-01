@@ -61,12 +61,13 @@
     </RadioGroup>
 
     <com.udacity.LoadingButton
-        android:id="@+id/custom_button"
+        android:id="@+id/downloadButton"
         android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_margin="20dp"
         app:buttonBackground="@color/colorPrimary"
         app:textColor="@color/white"
+        app:progressColor="@color/colorPrimaryDark"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

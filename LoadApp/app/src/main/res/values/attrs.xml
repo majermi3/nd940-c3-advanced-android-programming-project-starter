@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="LoadingButton">
         <attr name="buttonBackground" format="color" />
+        <attr name="progressColor" format="color" />
         <attr name="textColor" format="color" />
     </declare-styleable>
 </resources>
