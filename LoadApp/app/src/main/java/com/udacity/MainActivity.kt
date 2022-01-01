@@ -2,6 +2,7 @@ package com.udacity
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -9,16 +10,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.database.Cursor
+import android.graphics.Color
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.NotificationCompat
+import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
+import com.udacity.util.sendNotification
 
 
 class MainActivity : AppCompatActivity() {
@@ -46,6 +50,10 @@ class MainActivity : AppCompatActivity() {
         downloadOptions = findViewById(R.id.downloadOptions)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
+        createChannel(
+            getString(R.string.notification_channel_id),
+            getString(R.string.notification_channel_name)
+        )
 
         downloadButton.setOnClickListener {
             val url = getSelectedDownloadUrl()
@@ -67,6 +75,7 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             downloadButton.isEnabled = true
+            sendNotification()
         }
     }
 
@@ -134,6 +143,39 @@ class MainActivity : AppCompatActivity() {
             1 -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
             2 -> "https://github.com/square/retrofit"
             else -> null
+        }
+    }
+
+    private fun sendNotification() {
+        val notificationManager = ContextCompat.getSystemService(
+            applicationContext,
+            NotificationManager::class.java
+        ) as NotificationManager
+
+        notificationManager.sendNotification(
+            getString(R.string.notification_message),
+            applicationContext
+        )
+    }
+
+    private fun createChannel(channelId: String, channelName: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val notificationChannel = NotificationChannel(
+                channelId,
+                channelName,
+                NotificationManager.IMPORTANCE_DEFAULT
+            )
+                .apply {
+                    setShowBadge(false)
+                }
+
+            notificationChannel.enableLights(true)
+            notificationChannel.lightColor = Color.BLUE
+            notificationChannel.enableVibration(true)
+            notificationChannel.description = "File download"
+
+            val notificationManager = getSystemService(NotificationManager::class.java)
+            notificationManager.createNotificationChannel(notificationChannel)
         }
     }
 

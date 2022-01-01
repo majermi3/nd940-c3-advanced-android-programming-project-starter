@@ -8,6 +8,11 @@
     <string name="notification_description">The Project 3 repository is downloaded</string>
     <string name="notification_button">See changes</string>
 
+    <string name="detail">Check the status</string>
+    <string name="notification_channel_id">loading_status_bar</string>
+    <string name="notification_channel_name">Loading status bar</string>
+    <string name="notification_message">The project 3 repository is downloaded</string>
+
     <string name="download">Download</string>
     <string name="download_in_progress">We are loading</string>
     <string name="button_name">Click me</string>
