@@ -3,6 +3,7 @@
     <declare-styleable name="LoadingButton">
         <attr name="buttonBackground" format="color" />
         <attr name="progressColor" format="color" />
+        <attr name="progressArcColor" format="color" />
         <attr name="textColor" format="color" />
         <attr name="text" format="string" />
         <attr name="textWhileLoading" format="string" />

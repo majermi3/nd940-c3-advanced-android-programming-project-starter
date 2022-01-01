@@ -16,12 +16,16 @@ class LoadingButton @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
+    var arcOffset = 50f
+    var arcDiameter = 80f
+
     private var widthSize = 0
     private var heightSize = 0
 
     private var textColor = 0
     private var buttonBackground = 0
     private var progressColor = 0
+    private var progressArcColor = 0
     private var text = ""
     private var initialText = ""
     private var loadingText = ""
@@ -56,6 +60,7 @@ class LoadingButton @JvmOverloads constructor(
         context.withStyledAttributes(attrs, R.styleable.LoadingButton) {
             buttonBackground = getColor(R.styleable.LoadingButton_buttonBackground, 0)
             progressColor = getColor(R.styleable.LoadingButton_progressColor, 0)
+            progressArcColor = getColor(R.styleable.LoadingButton_progressArcColor, 0)
             textColor = getColor(R.styleable.LoadingButton_textColor, 0)
 
             initialText = getString(R.styleable.LoadingButton_text) ?: ""
@@ -92,6 +97,8 @@ class LoadingButton @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas) {
         super.onDraw(canvas)
+        val centerX = widthSize.toFloat() / 2
+        val centerY = heightSize.toFloat() / 2
 
         paint.color = buttonBackground
         canvas.drawRect(0f, 0f, widthSize.toFloat(), heightSize.toFloat(), paint)
@@ -103,10 +110,27 @@ class LoadingButton @JvmOverloads constructor(
         paint.color = textColor
         canvas.drawText(
                 text,
-                widthSize.toFloat() / 2,
+            centerX,
                 (heightSize.toFloat() - paint.descent() - paint.ascent()) / 2,
                 paint
         )
+
+        if (progress > 0) {
+            val textWidth = paint.measureText(text)
+            val progressArcX = centerX + textWidth / 2 + arcOffset
+            paint.color = progressArcColor
+            paint.style = Paint.Style.FILL
+            canvas.drawArc(
+                progressArcX,
+                centerY - arcDiameter / 2,
+                progressArcX + arcDiameter,
+                centerY + arcDiameter / 2,
+                0f,
+                360f * (progress / 100),
+                true,
+                paint
+            )
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

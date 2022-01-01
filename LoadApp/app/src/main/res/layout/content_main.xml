@@ -70,6 +70,7 @@
         app:buttonBackground="@color/colorPrimary"
         app:textColor="@color/white"
         app:progressColor="@color/colorPrimaryDark"
+        app:progressArcColor="@color/colorAccent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
