@@ -1,7 +1,5 @@
 package com.udacity
 
-import android.animation.Animator
-import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.content.Context
 import android.graphics.Canvas
@@ -24,7 +22,8 @@ class LoadingButton @JvmOverloads constructor(
     private var progressColor = 0
 
     private var progress = 0f
-    private var progressMilestone = 0f
+
+    val anim = ValueAnimator()
 
     private val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
         style = Paint.Style.FILL
@@ -48,7 +47,6 @@ class LoadingButton @JvmOverloads constructor(
 
     fun reset() {
         progress = 0f
-        progressMilestone = 0f
     }
 
     fun setProgress(progress: Float) {
@@ -56,17 +54,15 @@ class LoadingButton @JvmOverloads constructor(
     }
 
     fun setProgress(progress: Float, duration: Long) {
-        val anim = ValueAnimator.ofFloat(progressMilestone, progress)
+        // Cancel previous animation
+        anim.cancel()
+
+        anim.setFloatValues(this.progress, progress)
         anim.duration = duration
         anim.addUpdateListener {
             this.progress = it.animatedValue as Float
             invalidate()
         }
-        anim.addListener(object : AnimatorListenerAdapter() {
-            override fun onAnimationEnd(p0: Animator?) {
-                progressMilestone = progress
-            }
-        })
         anim.start()
     }
 
