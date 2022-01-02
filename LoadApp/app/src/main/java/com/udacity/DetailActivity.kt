@@ -2,11 +2,14 @@ package com.udacity
 
 import android.annotation.SuppressLint
 import android.app.DownloadManager
+import android.app.NotificationManager
 import android.database.Cursor
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import com.udacity.util.cancelNotification
 import kotlinx.android.synthetic.main.activity_detail.*
 
 class DetailActivity : AppCompatActivity() {
@@ -22,6 +25,8 @@ class DetailActivity : AppCompatActivity() {
         setSupportActionBar(toolbar)
 
         val downloadId = intent.getLongExtra(Constants.EXTRA_DOWNLOAD_ID, 0)
+
+        cancelNotification(downloadId)
 
         fileNameTextView = findViewById(R.id.file_name)
         statusTextView = findViewById(R.id.status)
@@ -53,5 +58,13 @@ class DetailActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun cancelNotification(id: Long?) {
+        val notificationManager = ContextCompat.getSystemService(
+            applicationContext,
+            NotificationManager::class.java
+        ) as NotificationManager
+        notificationManager.cancelNotification(id)
     }
 }

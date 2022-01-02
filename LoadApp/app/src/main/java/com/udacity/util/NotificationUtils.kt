@@ -9,8 +9,6 @@ import com.udacity.Constants
 import com.udacity.DetailActivity
 import com.udacity.R
 
-private val NOTIFICATION_ID = 0
-
 fun NotificationManager.sendNotification(
     id: Long?,
     messageBody: String,
@@ -18,10 +16,11 @@ fun NotificationManager.sendNotification(
 ) {
     val contentIntent = Intent(applicationContext, DetailActivity::class.java)
     contentIntent.putExtra(Constants.EXTRA_DOWNLOAD_ID, id)
+    val notificationId = id?.toInt() ?: 0
 
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
-        NOTIFICATION_ID,
+        notificationId,
         contentIntent,
         PendingIntent.FLAG_UPDATE_CURRENT
     )
@@ -43,6 +42,11 @@ fun NotificationManager.sendNotification(
         )
         .setPriority(NotificationCompat.PRIORITY_DEFAULT)
 
-    notify(NOTIFICATION_ID, builder.build())
+    notify(notificationId, builder.build())
 
+}
+
+fun NotificationManager.cancelNotification(id: Long?) {
+    val notificationId = id?.toInt() ?: 0
+    cancel(notificationId)
 }
