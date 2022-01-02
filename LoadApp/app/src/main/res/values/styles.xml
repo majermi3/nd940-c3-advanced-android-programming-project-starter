@@ -22,7 +22,7 @@
     </style>
 
     <style name="table_column">
-        <item name="android:textSize">18sp</item>
+        <item name="android:textSize">@dimen/medium_text_size</item>
     </style>
 
 </resources>
