@@ -5,13 +5,20 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.udacity.Constants
 import com.udacity.DetailActivity
 import com.udacity.R
 
 private val NOTIFICATION_ID = 0
 
-fun NotificationManager.sendNotification(messageBody: String, applicationContext: Context) {
+fun NotificationManager.sendNotification(
+    id: Long?,
+    messageBody: String,
+    applicationContext: Context
+) {
     val contentIntent = Intent(applicationContext, DetailActivity::class.java)
+    contentIntent.putExtra(Constants.EXTRA_DOWNLOAD_ID, id)
+
     val contentPendingIntent = PendingIntent.getActivity(
         applicationContext,
         NOTIFICATION_ID,

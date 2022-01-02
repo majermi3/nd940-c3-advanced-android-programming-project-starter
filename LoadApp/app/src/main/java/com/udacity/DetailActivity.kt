@@ -1,15 +1,52 @@
 package com.udacity
 
+import android.annotation.SuppressLint
+import android.app.DownloadManager
+import android.database.Cursor
 import android.os.Bundle
+import android.util.Log
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_detail.*
+import org.w3c.dom.Text
 
 class DetailActivity : AppCompatActivity() {
 
+    private lateinit var fileNameTextView: TextView
+    private lateinit var statusTextView: TextView
+
+    @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_detail)
         setSupportActionBar(toolbar)
-    }
 
+        val downloadId = intent.getLongExtra(Constants.EXTRA_DOWNLOAD_ID, 0)
+
+        fileNameTextView = findViewById(R.id.file_name)
+        statusTextView = findViewById(R.id.status)
+
+        val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
+
+        val query = DownloadManager.Query()
+        query.setFilterById(downloadId)
+        val cursor: Cursor = downloadManager.query(query)
+
+        if (cursor.moveToFirst()) {
+            val status = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_STATUS))
+            val fileName = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE))
+
+            fileNameTextView.text = fileName
+            when (status) {
+                DownloadManager.STATUS_SUCCESSFUL -> {
+                    statusTextView.text = getString(R.string.status_success)
+                    statusTextView.setTextColor(getColor(R.color.success))
+                }
+                else -> {
+                    statusTextView.text = getString(R.string.status_fail)
+                    statusTextView.setTextColor(getColor(R.color.error))
+                }
+            }
+        }
+    }
 }

@@ -56,11 +56,13 @@ class MainActivity : AppCompatActivity() {
         )
 
         downloadButton.setOnClickListener {
-            val url = getSelectedDownloadUrl()
+            val idx = getSelectedRadioIndex()
+            val url = getDownloadUrl(idx)
+            val fileName = getFileName(idx)
 
             if (url != null) {
                 downloadButton.isEnabled = false
-                download(url)
+                download(url, fileName)
 
                 // Set progress to 10% to indicate beginning of download
                 downloadButton.setProgress(INITIAL_PROGRESS, 500)
@@ -75,14 +77,14 @@ class MainActivity : AppCompatActivity() {
         override fun onReceive(context: Context?, intent: Intent?) {
             val id = intent?.getLongExtra(DownloadManager.EXTRA_DOWNLOAD_ID, -1)
             downloadButton.isEnabled = true
-            sendNotification()
+            sendNotification(id)
         }
     }
 
-    private fun download(url: String) {
+    private fun download(url: String, fileName: String?) {
         val request =
             DownloadManager.Request(Uri.parse(url))
-                .setTitle(getString(R.string.app_name))
+                .setTitle(fileName)
                 .setDescription(getString(R.string.app_description))
                 .setRequiresCharging(false)
                 .setAllowedOverMetered(true)
@@ -134,11 +136,8 @@ class MainActivity : AppCompatActivity() {
         Toast.makeText(applicationContext, resId, Toast.LENGTH_SHORT).show()
     }
 
-    private fun getSelectedDownloadUrl(): String? {
-        val selectedRadio = findViewById<RadioButton>(downloadOptions.checkedRadioButtonId)
-        val selectedRadioIdx = downloadOptions.indexOfChild(selectedRadio)
-
-        return when(selectedRadioIdx) {
+    private fun getDownloadUrl(idx: Int): String? {
+        return when(idx) {
             0 -> "https://github.com/bumptech/glide"
             1 -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
             2 -> "https://github.com/square/retrofit"
@@ -146,13 +145,28 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun sendNotification() {
+    private fun getFileName(idx: Int): String? {
+        return when(idx) {
+            0 -> getString(R.string.file_name_glide)
+            1 -> getString(R.string.file_name_udacity)
+            2 -> getString(R.string.file_name_retrofit)
+            else -> null
+        }
+    }
+
+    private fun getSelectedRadioIndex(): Int {
+        val selectedRadio = findViewById<RadioButton>(downloadOptions.checkedRadioButtonId)
+        return downloadOptions.indexOfChild(selectedRadio)
+    }
+
+    private fun sendNotification(id: Long?) {
         val notificationManager = ContextCompat.getSystemService(
             applicationContext,
             NotificationManager::class.java
         ) as NotificationManager
 
         notificationManager.sendNotification(
+            id,
             getString(R.string.notification_message),
             applicationContext
         )

@@ -27,4 +27,9 @@
     <string name="file_name_dummy_text">Udacity - Current repository by Udacity</string>
     <string name="status">Status:</string>
     <string name="status_dummy_text">Success</string>
+    <string name="status_success">Success</string>
+    <string name="status_fail">Fail</string>
+    <string name="file_name_glide">Glide</string>
+    <string name="file_name_retrofit">Retrofit</string>
+    <string name="file_name_udacity">LoadApp - Current repository by Udacity</string>
 </resources>
