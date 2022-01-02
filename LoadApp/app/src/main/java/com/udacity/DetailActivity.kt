@@ -4,16 +4,16 @@ import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.database.Cursor
 import android.os.Bundle
-import android.util.Log
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.android.synthetic.main.activity_detail.*
-import org.w3c.dom.Text
 
 class DetailActivity : AppCompatActivity() {
 
     private lateinit var fileNameTextView: TextView
     private lateinit var statusTextView: TextView
+    private lateinit var okButton: Button
 
     @SuppressLint("Range")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +25,11 @@ class DetailActivity : AppCompatActivity() {
 
         fileNameTextView = findViewById(R.id.file_name)
         statusTextView = findViewById(R.id.status)
+        okButton = findViewById(R.id.ok_button)
+
+        okButton.setOnClickListener {
+            finish()
+        }
 
         val downloadManager = getSystemService(DOWNLOAD_SERVICE) as DownloadManager
 

@@ -16,7 +16,7 @@
         android:layout_marginEnd="@dimen/medium_margin"
         android:layout_marginBottom="@dimen/medium_margin"
         android:stretchColumns="1"
-        app:layout_constraintBottom_toTopOf="@+id/button"
+        app:layout_constraintBottom_toTopOf="@+id/ok_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -75,7 +75,7 @@
     </TableLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/ok_button"
         android:layout_width="0dp"
         android:layout_height="@dimen/button_height"
         android:layout_margin="@dimen/big_margin"
