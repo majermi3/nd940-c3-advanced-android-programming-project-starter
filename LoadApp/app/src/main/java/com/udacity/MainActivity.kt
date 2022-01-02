@@ -18,6 +18,7 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
@@ -38,6 +39,11 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var downloadButton: LoadingButton
     private lateinit var downloadOptions: RadioGroup
+    private lateinit var glideRadioButton: RadioButton
+    private lateinit var udacityRadioButton: RadioButton
+    private lateinit var retrofitRadioButton: RadioButton
+    private lateinit var otherRadioButton: RadioButton
+    private lateinit var mainLayout: MotionLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,12 +54,30 @@ class MainActivity : AppCompatActivity() {
 
         downloadButton = findViewById(R.id.downloadButton)
         downloadOptions = findViewById(R.id.downloadOptions)
+        glideRadioButton = findViewById(R.id.radio_glide)
+        udacityRadioButton = findViewById(R.id.radio_loadapp)
+        retrofitRadioButton = findViewById(R.id.radio_retrofit)
+        otherRadioButton = findViewById(R.id.radio_other)
+        mainLayout = findViewById(R.id.main_layout)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         createChannel(
             getString(R.string.notification_channel_id),
             getString(R.string.notification_channel_name)
         )
+
+        glideRadioButton.setOnClickListener {
+            mainLayout.transitionToStart()
+        }
+        udacityRadioButton.setOnClickListener {
+            mainLayout.transitionToStart()
+        }
+        retrofitRadioButton.setOnClickListener {
+            mainLayout.transitionToStart()
+        }
+        otherRadioButton.setOnClickListener {
+            mainLayout.transitionToEnd()
+        }
 
         downloadButton.setOnClickListener {
             val idx = getSelectedRadioIndex()

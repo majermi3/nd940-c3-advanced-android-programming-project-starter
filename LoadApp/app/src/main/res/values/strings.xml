@@ -22,6 +22,7 @@
     <string name="radio_glide_label">Glide - Image loading library by BumpTech</string>
     <string name="radio_udacity_label">LoadApp - Current repository by Udacity</string>
     <string name="radio_retrofit_label">Retrofit - Type-safe HTTP client for Android and Java by Square, Inc</string>
+    <string name="radio_other">Other</string>
     <string name="warning_no_file_selected">Please select the file to download</string>
     <string name="file_name">File name:</string>
     <string name="file_name_dummy_text">Udacity - Current repository by Udacity</string>
@@ -32,4 +33,5 @@
     <string name="file_name_glide">Glide</string>
     <string name="file_name_retrofit">Retrofit</string>
     <string name="file_name_udacity">LoadApp - Current repository by Udacity</string>
+    <string name="url_to_download">URL to download</string>
 </resources>
