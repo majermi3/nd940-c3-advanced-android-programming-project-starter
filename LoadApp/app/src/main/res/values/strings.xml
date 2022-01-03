@@ -24,12 +24,14 @@
     <string name="radio_retrofit_label">Retrofit - Type-safe HTTP client for Android and Java by Square, Inc</string>
     <string name="radio_other">Other</string>
     <string name="warning_no_file_selected">Please select the file to download</string>
+    <string name="warning_invalid_url">Given URL is invalid</string>
     <string name="file_name">File name:</string>
     <string name="file_name_dummy_text">Udacity - Current repository by Udacity</string>
     <string name="status">Status:</string>
     <string name="status_dummy_text">Success</string>
     <string name="status_success">Success</string>
     <string name="status_fail">Fail</string>
+    <string name="file_name_other">LoadingStatusAppDownload</string>
     <string name="file_name_glide">Glide</string>
     <string name="file_name_retrofit">Retrofit</string>
     <string name="file_name_udacity">LoadApp - Current repository by Udacity</string>

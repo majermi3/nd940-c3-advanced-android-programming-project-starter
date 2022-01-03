@@ -14,6 +14,8 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.util.Patterns
+import android.widget.EditText
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.Toast
@@ -44,6 +46,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var retrofitRadioButton: RadioButton
     private lateinit var otherRadioButton: RadioButton
     private lateinit var mainLayout: MotionLayout
+    private lateinit var urlEditText: EditText
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,6 +62,7 @@ class MainActivity : AppCompatActivity() {
         retrofitRadioButton = findViewById(R.id.radio_retrofit)
         otherRadioButton = findViewById(R.id.radio_other)
         mainLayout = findViewById(R.id.main_layout)
+        urlEditText = findViewById(R.id.url_edit_text)
 
         registerReceiver(receiver, IntentFilter(DownloadManager.ACTION_DOWNLOAD_COMPLETE))
         createChannel(
@@ -84,15 +88,17 @@ class MainActivity : AppCompatActivity() {
             val url = getDownloadUrl(idx)
             val fileName = getFileName(idx)
 
-            if (url != null) {
+            if (url == null) {
+                showToast(R.string.warning_no_file_selected)
+            } else if (!isUrlValid(url)) {
+                showToast(R.string.warning_invalid_url)
+            } else {
                 downloadButton.isEnabled = false
                 download(url, fileName)
 
                 // Set progress to 10% to indicate beginning of download
                 downloadButton.setProgress(INITIAL_PROGRESS, 500)
                 observeProgress()
-            } else {
-                showToast(R.string.warning_no_file_selected)
             }
         }
     }
@@ -165,6 +171,7 @@ class MainActivity : AppCompatActivity() {
             0 -> "https://github.com/bumptech/glide"
             1 -> "https://github.com/udacity/nd940-c3-advanced-android-programming-project-starter"
             2 -> "https://github.com/square/retrofit"
+            3 -> urlEditText.text.toString()
             else -> null
         }
     }
@@ -174,6 +181,7 @@ class MainActivity : AppCompatActivity() {
             0 -> getString(R.string.file_name_glide)
             1 -> getString(R.string.file_name_udacity)
             2 -> getString(R.string.file_name_retrofit)
+            3 -> getString(R.string.file_name_other)
             else -> null
         }
     }
@@ -217,8 +225,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun isUrlValid(url: String): Boolean {
+        return Patterns.WEB_URL.matcher(url).matches()
+    }
+
     companion object {
-        private const val CHANNEL_ID = "channelId"
         private const val PROGRESS_THRESHOLD = 1f
         private const val INITIAL_PROGRESS = 10f
     }
