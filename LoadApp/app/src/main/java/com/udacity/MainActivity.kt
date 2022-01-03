@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.DownloadManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -21,7 +20,6 @@ import android.widget.RadioGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.app.NotificationCompat
 import androidx.core.content.ContextCompat
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
@@ -35,9 +33,6 @@ class MainActivity : AppCompatActivity() {
     private var progress: Float = 0f
 
     private lateinit var downloadManager: DownloadManager
-    private lateinit var notificationManager: NotificationManager
-    private lateinit var pendingIntent: PendingIntent
-    private lateinit var action: NotificationCompat.Action
 
     private lateinit var downloadButton: LoadingButton
     private lateinit var downloadOptions: RadioGroup
@@ -233,5 +228,4 @@ class MainActivity : AppCompatActivity() {
         private const val PROGRESS_THRESHOLD = 1f
         private const val INITIAL_PROGRESS = 10f
     }
-
 }
